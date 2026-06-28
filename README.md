@@ -63,6 +63,23 @@ Python 3 (standard library only).
 > the API. If you see `📊 usage limits not available yet`, send a few messages and
 > it will populate.
 
+## Chinese labels
+
+Set `CC_QUOTA_LANG=zh` for Chinese labels (default is English):
+
+```json
+{
+  "statusLine": {
+    "type": "command",
+    "command": "CC_QUOTA_LANG=zh python3 /path/to/statusline-quota.py"
+  }
+}
+```
+
+```
+🤖 Opus 4.8 | ⏳ 5h 🟢76%剩 (4h12m重置) | 📅 周 🟢78%剩 (91h12m重置) | 🧠 0%
+```
+
 ## Debugging
 
 Set `CC_QUOTA_DEBUG` to a file path to dump the raw stdin payload so you can see

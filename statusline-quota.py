@@ -11,10 +11,31 @@ specifically `rate_limits.{five_hour,seven_day}` (same source as `/usage`).
 Output example:
     🤖 Opus 4.8 | ⏳ 5h 🟢82% left (4h21m) | 📅 wk 🟢78% left (91h) | 🧠 12%
 
-Set CC_QUOTA_DEBUG=/path/to/file.json to dump the raw stdin payload for
-inspection.
+Environment variables:
+    CC_QUOTA_LANG   "en" (default) or "zh" for Chinese labels.
+    CC_QUOTA_DEBUG  Path to dump the raw stdin payload for inspection.
 """
 import sys, json, time, os
+
+LANG = os.environ.get("CC_QUOTA_LANG", "en").lower()
+
+STRINGS = {
+    "en": {
+        "5h": "5h",
+        "wk": "wk",
+        "left": "{left:.0f}% left",
+        "reset": "({reset})",
+        "unavailable": "📊 usage limits not available yet",
+    },
+    "zh": {
+        "5h": "5h",
+        "wk": "周",
+        "left": "{left:.0f}%剩",
+        "reset": "({reset}重置)",
+        "unavailable": "📊 额度数据未就绪",
+    },
+}
+T = STRINGS.get(LANG, STRINGS["en"])
 
 
 def fmt_reset(ts):
@@ -40,10 +61,10 @@ def window_segment(emoji, label, win):
         return None
     left = max(0, 100 - used)
     icon = "🟢" if left > 30 else ("🟡" if left > 10 else "🔴")
-    s = f"{emoji} {label} {icon}{left:.0f}% left"
+    s = f"{emoji} {label} {icon}{T['left'].format(left=left)}"
     reset = fmt_reset(win.get("resets_at"))
     if reset:
-        s += f" ({reset})"
+        s += " " + T["reset"].format(reset=reset)
     return s
 
 
@@ -68,14 +89,14 @@ def main():
     parts.append(f"🤖 {model}")
 
     rl = data.get("rate_limits") or {}
-    s5 = window_segment("⏳", "5h", rl.get("five_hour"))
-    s7 = window_segment("📅", "wk", rl.get("seven_day"))
+    s5 = window_segment("⏳", T["5h"], rl.get("five_hour"))
+    s7 = window_segment("📅", T["wk"], rl.get("seven_day"))
     if s5:
         parts.append(s5)
     if s7:
         parts.append(s7)
     if not s5 and not s7:
-        parts.append("📊 usage limits not available yet")
+        parts.append(T["unavailable"])
 
     cw = data.get("context_window") or {}
     size = cw.get("context_window_size")
