@@ -1,5 +1,13 @@
 # Claude Code Quota Statusline
 
+> See your remaining Claude subscription usage — 5-hour and weekly limits — right in your Claude Code statusline.
+
+[![License: MIT](https://img.shields.io/github/license/luckbug0817/claude-code-quota-statusline?color=blue)](LICENSE)
+[![Stars](https://img.shields.io/github/stars/luckbug0817/claude-code-quota-statusline?style=social)](https://github.com/luckbug0817/claude-code-quota-statusline/stargazers)
+[![Python](https://img.shields.io/badge/python-3.x-blue?logo=python&logoColor=white)](https://www.python.org/)
+![Dependencies](https://img.shields.io/badge/dependencies-none-success)
+[![Claude Code](https://img.shields.io/badge/Claude%20Code-statusline-cba6f7?logo=anthropic&logoColor=white)](https://claude.com/claude-code)
+
 A tiny [Claude Code](https://claude.com/claude-code) statusline for **subscription (Pro/Max) users**.
 
 It shows how much of your **usage limits** are left — the rolling **5-hour window** and the **weekly (7-day) window** — instead of the per-token dollar estimates that tools like `ccusage` show (which don't mean anything on a subscription plan).
